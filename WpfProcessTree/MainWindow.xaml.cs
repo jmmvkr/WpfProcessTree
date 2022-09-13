@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VData;
+using VProcessWindow;
 using VProcessWindow.Example;
 
 namespace WpfProcessTree
@@ -32,18 +33,26 @@ namespace WpfProcessTree
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             psModel = new ProcessModel();
-            psList = psModel.updateTree();
-            xTree.ItemsSource = psList;
+            refreshProcessTree(true);
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Key.F5 == e.Key)
+            {
+                refreshProcessTree(true);
+            }
         }
 
         private void TxtFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
-            xTree.ItemsSource = psModel.filter(psList, txtFilter.Text);
+            refreshProcessTree(false);
         }
 
         private void TxtFilter_KeyDown(object sender, KeyEventArgs e)
@@ -54,12 +63,23 @@ namespace WpfProcessTree
             }
         }
 
+        void refreshProcessTree(bool bUpdateTree)
+        {
+            if (bUpdateTree)
+            {
+                xTree.ItemsSource = null;
+                psList = psModel.updateTree();
+            }
+            xTree.ItemsSource = psModel.filter(psList, txtFilter.Text);
+        }
+
         private void XTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
         }
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            IntPtr pWindow = IntPtr.Zero;
             if (2 == e.ClickCount)
             {
                 var tx = sender as TextBlock;
@@ -73,8 +93,18 @@ namespace WpfProcessTree
                     {
                         //WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
                         //wp.moveToCenter();
+                        try
+                        {
+                            pWindow = p.MainWindowHandle;
+                        }
+                        catch (Exception ex) { MessageBox.Show(ex.Message); }
                     }
                 }
+            }
+            if (IntPtr.Zero != pWindow)
+            {
+                WindowPlacer wp = WindowPlacer.fromHandle(pWindow);
+                wp.BringToFront();
             }
         }
 
