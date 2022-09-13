@@ -7,23 +7,22 @@ using System.Threading.Tasks;
 using VData;
 using VProcessWindow;
 
-namespace WpfProcessTree
+namespace VProcessWindow.Example
 {
-
-    internal class ProcessModel
+    public class ProcessModel
     {
         ProcessSearch psSearcher = new ProcessSearch();
         ProcessTree<ProcessStructure> psTree = new ProcessTree<ProcessStructure>();
         IconCache icons;
 
-        internal ProcessModel()
+        public ProcessModel()
         {
             Global.init();
             icons = Global.instance.processIcon;
             psTree.root = NodePs.v(ProcessStructure.group("psRoot"));
         }
 
-        internal IList<Node<ProcessStructure>> updateTree()
+        public IList<Node<ProcessStructure>> updateTree()
         {
             var psList = psSearcher.search();
 
@@ -121,7 +120,7 @@ namespace WpfProcessTree
             return false;
         }
 
-        internal IEnumerable filter(IList<Node<ProcessStructure>> psList, string strFilter)
+        public IEnumerable filter(IList<Node<ProcessStructure>> psList, string strFilter)
         {
             if (String.IsNullOrEmpty(strFilter))
             {

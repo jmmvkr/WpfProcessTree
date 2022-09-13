@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VData;
-using VProcessWindow;
 
-namespace WpfProcessTree
+namespace VProcessWindow.Example
 {
-
-    internal struct ProcessStructure
+    public struct ProcessStructure
     {
         public int pid;
         public string name;
@@ -67,5 +65,4 @@ namespace WpfProcessTree
     }
 
     internal class NodePs : Node<ProcessStructure> { }
-
 }

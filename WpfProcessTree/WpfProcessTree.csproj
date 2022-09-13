@@ -68,8 +68,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProcessModel.cs" />
-    <Compile Include="ProcessStructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
