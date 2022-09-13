@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace VData
 {
@@ -41,9 +42,28 @@ namespace VData
             return this;
         }
 
-        internal void remove(Node<T> n)
+        public void remove(Node<T> n)
         {
             subNodes.Remove(n);
         }
-    }
+
+        public void ensureCapacity(int nCapacity)
+        {
+            IList<Node<T>> lst = subNodes;
+            if (emptyList == lst)
+            {
+                lst = new List<Node<T>>(nCapacity);
+                subNodes = lst;
+            }
+            else
+            {
+                List<Node<T>> pList = lst as List<Node<T>>;
+                if ((null != pList) && pList.Capacity < nCapacity)
+                {
+                    pList.Capacity = nCapacity;
+                }
+            }
+        }
+
+    } // end - class Node
 }

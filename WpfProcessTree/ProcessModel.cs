@@ -60,6 +60,7 @@ namespace WpfProcessTree
             // add to node tree
             var keys = bucket.keys.ToArray();
             Array.Sort(keys);
+            psRoot.ensureCapacity(keys.Count());
             foreach (var k in keys)
             {
                 // prepare a group
@@ -73,6 +74,7 @@ namespace WpfProcessTree
                 // add processes to group
                 bool bFirst = true;
                 var lst = bucket[k];
+                groupNode.ensureCapacity(lst.Count());
                 foreach (var ps in lst)
                 {
                     // add child node
