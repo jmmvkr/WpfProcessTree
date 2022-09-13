@@ -24,7 +24,7 @@ namespace WpfProcessTree
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal static ProcessModel psModel;
+        ProcessModel psModel;
         IList<Node<ProcessStructure>> psList;
 
 
