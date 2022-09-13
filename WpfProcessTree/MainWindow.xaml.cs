@@ -65,12 +65,20 @@ namespace WpfProcessTree
 
         void refreshProcessTree(bool bUpdateTree)
         {
+            // store previous node, for id of selected process
+            var prevNode = xTree.SelectedItem;
+
+            // refresh tree, if required
             if (bUpdateTree)
             {
                 xTree.ItemsSource = null;
                 psList = psModel.updateTree();
             }
+            // apply filter string
             xTree.ItemsSource = psModel.filter(psList, txtFilter.Text);
+
+            // focus on previous selected process
+            TreeFocus.focusOnNode(xTree, prevNode, psList);
         }
 
         private void XTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
