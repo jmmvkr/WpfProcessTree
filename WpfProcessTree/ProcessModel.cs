@@ -14,12 +14,12 @@ namespace WpfProcessTree
     {
         ProcessSearch psSearcher = new ProcessSearch();
         ProcessTree<ProcessStructure> psTree = new ProcessTree<ProcessStructure>();
-        IconCache icons = new IconCache();
+        IconCache icons;
 
         internal ProcessModel()
         {
             Global.init();
-            Global.instance.processIcon = icons;
+            icons = Global.instance.processIcon;
             psTree.root = NodePs.v(ProcessStructure.group("psRoot"));
         }
 
@@ -38,6 +38,24 @@ namespace WpfProcessTree
                 bucket.add(e.Name, st);
             };
             var psRoot = psTree.construct(psList);
+
+            // scan window title
+            Dictionary<int, string> mapPidTitle = new Dictionary<int, string>();
+            var lstWindowInfo = ProcessWindow.scanAllWindows();
+            foreach (var wi in lstWindowInfo)
+            {
+                int id = wi.pid;
+                if (!mapPidTitle.ContainsKey(id))
+                {
+                    string title = wi.title;
+                    switch (title)
+                    {
+                        case "Default IME": continue;
+                        case "MSCTFIME UI": continue;
+                    }
+                    mapPidTitle[wi.pid] = title;
+                }
+            }
 
             // add to node tree
             var keys = bucket.keys.ToArray();
@@ -61,6 +79,12 @@ namespace WpfProcessTree
                     var fullPath = node.__value.fullPath;
                     try
                     {
+                        var pid = node.val.pid;
+                        string title;
+                        if (mapPidTitle.TryGetValue(pid, out title))
+                        {
+                            node.__value.title = title;
+                        }
                         if (icons.loadIcon(fullPath))
                         {
                             node.__value.iconKey = fullPath;

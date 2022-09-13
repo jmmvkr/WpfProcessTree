@@ -15,6 +15,7 @@ namespace WpfProcessTree
         public string name;
         public string fullPath;
         public string iconKey;
+        public string title;
 
         public static ProcessStructure group(string nm)
         {
@@ -30,10 +31,21 @@ namespace WpfProcessTree
             st.name = null;
             st.fullPath = null;
             st.iconKey = null;
+            st.title = null;
             return st;
         }
 
-        public string Name => name;
+        public string getName()
+        {
+            var title = this.title;
+            if (null != title)
+            {
+                return title;
+            }
+            return name;
+        }
+
+        public string Name { get { return getName(); } }
         public string Tooltip => fullPath;
         public int Pid => pid;
         public System.Windows.Media.Imaging.BitmapImage Icon

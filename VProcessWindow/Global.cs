@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VData;
 
 namespace VProcessWindow
 {
@@ -10,6 +11,7 @@ namespace VProcessWindow
     {
         public static Global instance;
         public IconCache processIcon;
+        public TicketSystem<int, ProcessWindow.WindowScan> ticketSystem;
 
         public static void init()
         {
@@ -18,7 +20,10 @@ namespace VProcessWindow
 
         static Global makeOne()
         {
-            return new Global();
+            var g = new Global();
+            g.processIcon = new IconCache();
+            g.ticketSystem = new TicketSystem<int, ProcessWindow.WindowScan>() { makeNextTicket = ProcessWindow.makeTicket };
+            return g;
         }
 
     } // end - class Global
