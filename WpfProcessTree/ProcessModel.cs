@@ -75,37 +75,50 @@ namespace WpfProcessTree
                 var lst = bucket[k];
                 foreach (var ps in lst)
                 {
+                    // add child node
                     var node = NodePs.v(ps);
-                    var fullPath = node.__value.fullPath;
-                    try
+                    if (!updateChildNode(node, ref node.__value, mapPidTitle))
                     {
-                        var pid = node.val.pid;
-                        string title;
-                        if (mapPidTitle.TryGetValue(pid, out title))
-                        {
-                            node.__value.title = title;
-                        }
-                        if (icons.loadIcon(fullPath))
-                        {
-                            node.__value.iconKey = fullPath;
-                        }
-                        if (bFirst)
-                        {
-                            groupNode.__value.iconKey = node.__value.iconKey;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
                         continue;
                     }
                     groupNode.add(node);
+
+                    // use icon from first child node
+                    if (bFirst)
+                    {
+                        bFirst = false;
+                        groupNode.__value.iconKey = node.__value.iconKey;
+                    }
                 }
             }
 
             return psRoot.subNodes;
         }
-        
+
+        bool updateChildNode(Node<ProcessStructure> node, ref ProcessStructure rValue, Dictionary<int, string> mapPidTitle)
+        {
+            var fullPath = rValue.fullPath;
+            try
+            {
+                var pid = rValue.pid;
+                string title;
+                if (mapPidTitle.TryGetValue(pid, out title))
+                {
+                    rValue.title = title;
+                }
+                if (icons.loadIcon(fullPath))
+                {
+                    rValue.iconKey = fullPath;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return false;
+        }
+
         internal IEnumerable filter(IList<Node<ProcessStructure>> psList, string strFilter)
         {
             if (String.IsNullOrEmpty(strFilter))
@@ -119,6 +132,23 @@ namespace WpfProcessTree
                 if (nm.IndexOf(strFilter, StringComparison.InvariantCultureIgnoreCase) >= 0)
                 {
                     result.Add(node);
+                    continue;
+                }
+
+                bool bChildMatch = false;
+                foreach (var sub in node.subNodes)
+                {
+                    var title = sub.__value.title;
+                    if (null != title && title.IndexOf(strFilter, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    {
+                        bChildMatch = true;
+                        break;
+                    }
+                }
+                if (bChildMatch)
+                {
+                    result.Add(node);
+                    continue;
                 }
             }
             return result;
