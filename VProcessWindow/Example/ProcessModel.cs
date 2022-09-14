@@ -156,5 +156,21 @@ namespace VProcessWindow.Example
             return result;
         }
 
+        public Node<ProcessStructure> findByPid(int pid)
+        {
+            var rt = psTree.root;
+            foreach (var grp in rt.subNodes)
+            {
+                foreach (var ps in grp.subNodes)
+                {
+                    if (pid == ps.__value.pid)
+                    {
+                        return ps;
+                    }
+                }
+            }
+            return null;
+        }
+
     } // end - class ProcessModel
 }

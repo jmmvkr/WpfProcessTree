@@ -246,5 +246,29 @@ namespace WpfProcessTree
             }
         }
 
+        private void XMenuItem_ExploreFolder_Click(object sender, RoutedEventArgs e)
+        {
+            int pid = pidFromUi(txtSelected);
+            if (0 != pid)
+            {
+                Node<ProcessStructure> node = psModel.findByPid(pid);
+                string execPath = null;
+                if (null != node)
+                {
+                    execPath = node.val.fullPath;
+                }
+                if (null != execPath)
+                {
+                    FileInfo fi = new FileInfo(execPath);
+                    exploreFolder(fi.Directory.FullName);
+                }
+            }
+        }
+
+        void exploreFolder(string folderPath)
+        {
+            Process.Start(folderPath);
+        }
+
     } // end - class MainWindow
 }
