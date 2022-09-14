@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using VData;
 using VProcessWindow.Example;
 
@@ -121,7 +122,7 @@ namespace WpfProcessTree
                 if (null == tviPart) { break; }
                 if (iLast == i)
                 {
-                    tviPart.Focus();
+                    FocusManager.SetFocusedElement(xTree, tviPart);
                     break;
                 }
                 if (tviPart.HasItems)

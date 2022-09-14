@@ -122,9 +122,10 @@ namespace WpfProcessTree
             xTree.ItemsSource = psModel.filter(psList, txtFilter.Text);
 
             // focus on previous selected process
-            if (bUpdateTree)
+            TreeFocus.focusOnNode(xTree, prevNode, psList);
+            if (!bUpdateTree)
             {
-                TreeFocus.focusOnNode(xTree, prevNode, psList);
+                txtFilter.Focus();
             }
         }
 
