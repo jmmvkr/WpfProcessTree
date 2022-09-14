@@ -106,7 +106,8 @@ namespace WpfProcessTree
             }
             if (e.Key == Key.Return)
             {
-                TreePath.setTreeExpansion(xTree, true);
+                bool bExpand = !Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+                TreePath.setTreeExpansion(xTree, bExpand);
             }
         }
 
