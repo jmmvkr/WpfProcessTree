@@ -30,7 +30,6 @@ namespace WpfProcessTree.Dialog
             InitializeComponent();
             this.Loaded += SizeDialog_Loaded;
             this.IsVisibleChanged += Dialog_IsVisibleChanged;
-            this.WindowStartupLocation = WindowStartupLocation.Manual;
         }
 
         private void SizeDialog_Loaded(object sender, RoutedEventArgs e)
@@ -39,6 +38,53 @@ namespace WpfProcessTree.Dialog
             xConfirm.btnCancel.Click += BtnCancel_Click;
             txtWidth.KeyDown += Txt_KeyDown;
             txtHeight.KeyDown += Txt_KeyDown;
+
+            this.PreviewKeyDown += SizeDialog_PreviewKeyDown;
+            xConfirm.btnOk.KeyDown += BtnOk_KeyDown;
+        }
+
+        private void BtnOk_KeyDown(object sender, KeyEventArgs e)
+        {
+            usePresetByKey(e.Key);
+        }
+
+        private void usePresetByKey(Key k)
+        {
+            int idxPreset;
+            if (Key.D0 <= k && k <= Key.D9)
+            {
+                idxPreset = (k - Key.D0);
+                callPreset(idxPreset);
+            }
+        }
+
+        int callPreset(int idxPreset)
+        {
+            switch (idxPreset)
+            {
+                case 0: return takeSize(1920, 1080);
+                case 1: return takeSize(1634, 934);
+                case 2: return takeSize(1280, 720);
+                case 3: return takeSize(800, 600);
+            }
+            return 0;
+        }
+
+        int takeSize(double w, double h)
+        {
+            txtWidth.Text = String.Format("{0:f0}", w);
+            txtHeight.Text = String.Format("{0:f0}", h);
+            return 0;
+        }
+
+        private void SizeDialog_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            bool bCenterPreset = (Key.C == e.Key);
+            if ((Key.P == e.Key) || bCenterPreset)
+            {
+                cbCenter.IsChecked = (bCenterPreset);
+                xConfirm.btnOk.Focus();
+            }
         }
 
         private void Txt_KeyDown(object sender, KeyEventArgs e)
@@ -51,8 +97,8 @@ namespace WpfProcessTree.Dialog
             if (IsVisible)
             {
                 ReuseDialog.moveToCenter(Owner, this);
-                txtWidth.Text = String.Format("{0:f0}", param.size.Width);
-                txtHeight.Text = String.Format("{0:f0}", param.size.Height);
+                takeSize(param.size.Width, param.size.Height);
+                cbCenter.IsChecked = false;
             }
         }
 
@@ -66,6 +112,7 @@ namespace WpfProcessTree.Dialog
                 {
                     result.size.Width = w;
                     result.size.Height = h;
+                    result.moveCenter = (true == cbCenter.IsChecked);
                     dlg.ok();
                 }
             }
@@ -79,6 +126,7 @@ namespace WpfProcessTree.Dialog
         public struct Param
         {
             public Size size;
+            public bool moveCenter;
         }
 
     } // end - class SizeDialog

@@ -12,6 +12,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="1" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -30,7 +31,10 @@
             <TextBox Grid.Row="0" Grid.Column="2" x:Name="txtWidth" Style="{StaticResource xTxtInputStyle}" />
             <TextBox Grid.Row="2" Grid.Column="2" x:Name="txtHeight" Style="{StaticResource xTxtInputStyle}" />
         </Grid>
-        <local:ConfirmPanel Grid.Row="2" x:Name="xConfirm" />
+        <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" MinWidth="160">
+            <CheckBox x:Name="cbCenter" HorizontalAlignment="Left" Content="move to center" Margin="0,0,0,12" />
+        </StackPanel>
+        <local:ConfirmPanel Grid.Row="3" x:Name="xConfirm" />
     </Grid>
     
 </Window>

@@ -232,15 +232,24 @@ namespace WpfProcessTree
             bringProcessToFront(txtSelected);
         }
 
+        Size screenSize()
+        {
+            var sw = SystemParameters.PrimaryScreenWidth;
+            var sh = SystemParameters.PrimaryScreenHeight;
+            Size sz = Size.Parse("0,0");
+            sz.Width += sw;
+            sz.Height += sh;
+            return sz;
+        }
+
         private void XMenuItem_MoveToCenter_Click(object sender, RoutedEventArgs e)
         {
             Process p;
             if (tryGetProcess(pidFromUi(txtSelected), out p))
             {
                 WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
-                var sw = SystemParameters.PrimaryScreenWidth;
-                var sh = SystemParameters.PrimaryScreenHeight;
-                wp.moveToCenter(sw, sh);
+                var scr = screenSize();
+                wp.moveToCenter(scr.Width, scr.Height);
                 wp.bringToFront();
             }
         }
@@ -258,8 +267,14 @@ namespace WpfProcessTree
                 dlg.ins.param.size = wp.getRect().Size;
                 if (ReuseDialog.Ok == dlg.showDialog(this))
                 {
-                    var sz = dlg.ins.result.size;
-                    wp.resizeTo(sz.Width, sz.Height);
+                    var res = dlg.ins.result;
+                    wp.resizeTo(res.size.Width, res.size.Height);
+                    if (res.moveCenter)
+                    {
+                        var scr = screenSize();
+                        wp.moveToCenter(scr.Width, scr.Height);
+                    }
+                    wp.bringToFront();
                 }
             }
         }
