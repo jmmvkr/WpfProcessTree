@@ -23,6 +23,8 @@
                             <TextBlock.ContextMenu>
                                 <ContextMenu x:Name="menuTreePop">
                                     <MenuItem x:Name="xMenuItem_BrintToFront" Header="See process" Click="XMenuItem_BrintToFront_Click" />
+                                    <MenuItem x:Name="xMenuItem_MoveToCenter" Header="Move to Center" Click="XMenuItem_MoveToCenter_Click" />
+                                    <MenuItem x:Name="xMenuItem_Resize" Header="Resize" Click="XMenuItem_Resize_Click" />
                                 </ContextMenu>
                             </TextBlock.ContextMenu>
                         </TextBlock>

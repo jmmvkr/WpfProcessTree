@@ -181,7 +181,7 @@ namespace WpfProcessTree
             if (IntPtr.Zero != pWindow)
             {
                 WindowPlacer wp = WindowPlacer.fromHandle(pWindow);
-                wp.BringToFront();
+                wp.bringToFront();
             }
         }
 
@@ -191,17 +191,59 @@ namespace WpfProcessTree
             bool bFound = false;
             try
             {
-                res = Process.GetProcessById(pid);
-                bFound = true;
+                if (0 != pid)
+                {
+                    res = Process.GetProcessById(pid);
+                    bFound = true;
+                }
             }
             catch (Exception) { }
             p = res;
             return bFound;
         }
 
+        static int pidFromUi(object sender)
+        {
+            TextBlock ui = sender as TextBlock;
+            int pid;
+            if (null != ui)
+            {
+                string pidString = Convert.ToString(ui.Tag);
+                if (Int32.TryParse(pidString, out pid))
+                {
+                    return pid;
+                }
+            }
+            return 0;
+        }
+
         private void XMenuItem_BrintToFront_Click(object sender, RoutedEventArgs e)
         {
             bringProcessToFront(txtSelected);
+        }
+
+        private void XMenuItem_MoveToCenter_Click(object sender, RoutedEventArgs e)
+        {
+            Process p;
+            if (tryGetProcess(pidFromUi(txtSelected), out p))
+            {
+                WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
+                var sw = SystemParameters.PrimaryScreenWidth;
+                var sh = SystemParameters.PrimaryScreenHeight;
+                wp.moveToCenter(sw, sh);
+                wp.bringToFront();
+            }
+        }
+
+        private void XMenuItem_Resize_Click(object sender, RoutedEventArgs e)
+        {
+            Process p;
+            if (tryGetProcess(pidFromUi(txtSelected), out p))
+            {
+                WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
+                wp.resizeTo(1634, 934);
+                wp.bringToFront();
+            }
         }
 
     } // end - class MainWindow
