@@ -90,26 +90,31 @@ namespace WpfProcessTree
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            IntPtr pWindow = IntPtr.Zero;
             if (2 == e.ClickCount)
             {
-                var tx = sender as TextBlock;
-                string pidString = Convert.ToString(tx.Tag);
-                int pid;
+                bringProcessToFront(sender);
+            }
+        }
 
-                if (Int32.TryParse(pidString, out pid))
+        void bringProcessToFront(object sender)
+        {
+            IntPtr pWindow = IntPtr.Zero;
+            var tx = sender as TextBlock;
+            string pidString = Convert.ToString(tx.Tag);
+            int pid;
+
+            if (Int32.TryParse(pidString, out pid))
+            {
+                Process p;
+                if (tryGetProcess(pid, out p))
                 {
-                    Process p;
-                    if (tryGetProcess(pid, out p))
+                    //WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
+                    //wp.moveToCenter();
+                    try
                     {
-                        //WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
-                        //wp.moveToCenter();
-                        try
-                        {
-                            pWindow = p.MainWindowHandle;
-                        }
-                        catch (Exception ex) { MessageBox.Show(ex.Message); }
+                        pWindow = p.MainWindowHandle;
                     }
+                    catch (Exception ex) { MessageBox.Show(ex.Message); }
                 }
             }
             if (IntPtr.Zero != pWindow)
