@@ -61,6 +61,10 @@ namespace WpfProcessTree
             {
                 (sender as TextBox).Text = "";
             }
+            if (e.Key == Key.Return)
+            {
+                TreePath.setTreeExpansion(xTree, true);
+            }
         }
 
         void refreshProcessTree(bool bUpdateTree)

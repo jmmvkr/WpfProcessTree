@@ -58,6 +58,40 @@ namespace WpfProcessTree
             pathList.Insert(0, o);
         }
 
+        public static void setTreeExpansion(ItemsControl ic, bool bExpand)
+        {
+            TreeViewItem tvi = ic as TreeViewItem;
+            if (null != tvi)
+            {
+                tvi.IsExpanded = bExpand;
+            }
+
+            if (ic.HasItems)
+            {
+                foreach (var sub in ic.Items)
+                {
+                    TreeViewItem subTvi = sub as TreeViewItem;
+                    if (null != subTvi)
+                    {
+                        setTreeExpansion(subTvi, bExpand);
+                    }
+                    else
+                    {
+                        subTvi = findTreeItem(ic, sub);
+                        if ((null == subTvi) && bExpand)
+                        {
+                            ic.UpdateLayout();
+                            subTvi = findTreeItem(ic, sub);
+                        }
+                        if (null != subTvi)
+                        {
+                            setTreeExpansion(subTvi, bExpand);
+                        }
+                    }
+                } // end - for
+            } // end - if
+        }  // function setTreeExpansion()
+
         public void setTreeFocus(TreeView xTree)
         {
             ItemsControl tvi = xTree;
