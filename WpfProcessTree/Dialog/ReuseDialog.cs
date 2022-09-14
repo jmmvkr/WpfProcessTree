@@ -17,6 +17,15 @@ namespace WpfProcessTree.Dialog
             ReuseAdapter<U> ra = new ReuseAdapter<U>(u);
             return ra;
         }
+
+        public static void moveToCenter(Window pRef, Window pWnd)
+        {
+            Window pOwner = Window.GetWindow(pRef);
+            double cx = pOwner.Left + 0.5 * (pOwner.Width - pWnd.Width);
+            double cy = pOwner.Top + 0.5 * (pOwner.Height - pWnd.Height);
+            pWnd.Left = Math.Max(0.0, cx);
+            pWnd.Top = Math.Max(0.0, cy);
+        }
     }
 
 }

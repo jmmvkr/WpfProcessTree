@@ -5,15 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfProcessTree.Dialog"
         mc:Ignorable="d"
-        Title="SizeDialog" Height="450" Width="800">
+        Title="Resize Window" Width="290" Height="238">
     
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="8" />
+            <RowDefinition Height="1" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="8" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="lblWidth" Style="{StaticResource xLblInputStyle}" Text="Width" />
+            <TextBlock Grid.Row="2" Grid.Column="0" x:Name="lblHeight" Style="{StaticResource xLblInputStyle}" Text="Height" />
+            <TextBox Grid.Row="0" Grid.Column="2" x:Name="txtWidth" Style="{StaticResource xTxtInputStyle}" />
+            <TextBox Grid.Row="2" Grid.Column="2" x:Name="txtHeight" Style="{StaticResource xTxtInputStyle}" />
+        </Grid>
         <local:ConfirmPanel Grid.Row="2" x:Name="xConfirm" />
     </Grid>
     

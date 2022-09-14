@@ -255,13 +255,11 @@ namespace WpfProcessTree
                 //wp.bringToFront();
 
                 var dlg = DlgSet.ins().dlgSize;
-                if (ReuseDialog.Ok == dlg.showDialog())
+                dlg.ins.param.size = wp.getRect().Size;
+                if (ReuseDialog.Ok == dlg.showDialog(this))
                 {
-                    MessageBox.Show("ok");
-                }
-                else
-                {
-                    MessageBox.Show("cancel");
+                    var sz = dlg.ins.result.size;
+                    wp.resizeTo(sz.Width, sz.Height);
                 }
             }
         }
