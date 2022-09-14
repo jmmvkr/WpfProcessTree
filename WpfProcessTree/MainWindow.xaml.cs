@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,9 @@ namespace WpfProcessTree
     {
         ProcessModel psModel;
         IList<Node<ProcessStructure>> psList;
+        Node<ProcessStructure>[] emptyList = { };
+        Encoding enc = new UTF8Encoding(true, true);
+        ISet<string> psIgnore = new HashSet<string>();
 
 
         public MainWindow()
@@ -34,20 +38,48 @@ namespace WpfProcessTree
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             this.PreviewKeyDown += MainWindow_PreviewKeyDown;
+            psList = emptyList;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             psModel = new ProcessModel();
+            loadIgnoreGroups();
             refreshProcessTree(true);
         }
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (Key.F5 == e.Key)
+            var k = e.Key;
+            if (Key.F5 == k)
             {
                 refreshProcessTree(true);
             }
+            if (Key.S == k && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                saveProcessGroups("ps-list.txt");
+            }
+        }
+
+        void loadIgnoreGroups()
+        {
+            psIgnore.Clear();
+            foreach (var line in File.ReadAllLines("ps-ignore.txt"))
+            {
+                var trm = line.Trim();
+                if (String.IsNullOrEmpty(trm)) continue;
+                psIgnore.Add(trm);
+            }
+        }
+
+        void saveProcessGroups(string path)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var grp in psList)
+            {
+                sb.AppendLine(grp.val.name);
+            }
+            File.WriteAllText(path, sb.ToString(), enc);
         }
 
         private void TxtFilter_TextChanged(object sender, TextChangedEventArgs e)
@@ -76,7 +108,7 @@ namespace WpfProcessTree
             if (bUpdateTree)
             {
                 xTree.ItemsSource = null;
-                psList = psModel.updateTree();
+                psList = psModel.updateTree(psIgnore);
             }
             // apply filter string
             xTree.ItemsSource = psModel.filter(psList, txtFilter.Text);

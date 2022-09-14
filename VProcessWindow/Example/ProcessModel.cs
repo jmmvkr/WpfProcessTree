@@ -22,7 +22,7 @@ namespace VProcessWindow.Example
             psTree.root = NodePs.v(ProcessStructure.group("psRoot"));
         }
 
-        public IList<Node<ProcessStructure>> updateTree()
+        public IList<Node<ProcessStructure>> updateTree(ISet<string> psIgnore)
         {
             var psList = psSearcher.search();
 
@@ -68,6 +68,7 @@ namespace VProcessWindow.Example
                 {
                     grp = k.Substring(0, k.Length - 4);
                 }
+                if (psIgnore.Contains(grp)) { continue; }
                 var groupNode = psRoot.addAsChild(ProcessStructure.group(grp));
 
                 // add processes to group
