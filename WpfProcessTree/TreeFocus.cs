@@ -17,45 +17,66 @@ namespace WpfProcessTree
             //var selNode = psList[0].subNodes[0];
             if (null != selNode)
             {
-                TreeViewItem tviFound = null;
-                TreeViewItem tviSubFound = null;
-
                 int pid = selNode.val.pid;
                 Node<ProcessStructure> newTreeNode = null;
                 Node<ProcessStructure> newParentNode = null;
 
                 // find node and parent node
-                foreach (var one in psList)
+                foreach (var grp in psList)
                 {
                     if (null != newTreeNode) break;
-                    foreach (var ps in one.subNodes)
+                    foreach (var ps in grp.subNodes)
                     {
                         if (pid == ps.__value.pid)
                         {
                             newTreeNode = ps; // find node, in order to set focus of TreeViewItem
-                            newParentNode = one; // find parent node, in order to get parent TreeViewItem
+                            newParentNode = grp; // find parent node, in order to get parent TreeViewItem
                             break;
                         }
                     }
                 }
 
-                if (null != newParentNode)
+                // update tree focus by TreePath
+                if (null != newTreeNode)
                 {
-                    // find parent TreeViewItem
-                    tviFound = findTreeItem(xTree, newParentNode);
-                    if (null != tviFound && tviFound.HasItems)
-                    {
-                        tviFound.IsExpanded = true;
-                        tviFound.UpdateLayout();
+                    TreePath tPath = new TreePath();
+                    tPath.add(newTreeNode);
+                    tPath.add(newParentNode);
+                    tPath.setTreeFocus(xTree);
+                }
+            }
+        }
 
-                        // find node TreeViewItem
-                        tviSubFound = findTreeItem(tviFound, newTreeNode);
-                    }
-                }
-                if (null != tviSubFound)
+    } // end - class TreeFocus
+
+    internal class TreePath
+    {
+        List<object> pathList = new List<object>();
+
+        public void add(object o)
+        {
+            pathList.Insert(0, o);
+        }
+
+        public void setTreeFocus(TreeView xTree)
+        {
+            ItemsControl tvi = xTree;
+            var itemOrder = pathList;
+            int iLast = itemOrder.Count - 1;
+            for (int i = 0; i <= iLast; i++)
+            {
+                TreeViewItem tviPart = findTreeItem(tvi, itemOrder[i]);
+                if (null == tviPart) { break; }
+                if (tviPart.HasItems)
                 {
-                    tviSubFound.Focus();
+                    tviPart.IsExpanded = true;
+                    tviPart.UpdateLayout();
                 }
+                if (iLast == i)
+                {
+                    tviPart.Focus();
+                }
+                tvi = tviPart;
             }
         }
 
@@ -82,5 +103,5 @@ namespace WpfProcessTree
             return null;
         }
 
-    } // end - class TreeFocus
+    } // end - class TreePath
 }
