@@ -66,6 +66,40 @@ namespace WpfProcessTree
             }
         }
 
+        public static TreeViewItem findTreeUi(TreeView xTree, object v)
+        {
+            ItemsControl ic = xTree;
+            return findTreeUi(ic, v);
+        }
+
+        static TreeViewItem findTreeUi(ItemsControl ic, object v)
+        {
+            var ig = ic.ItemContainerGenerator;
+
+            // find direct child
+            foreach (var it in ic.Items)
+            {
+                if (v == it)
+                {
+                    return ig.ContainerFromItem(v) as TreeViewItem;
+                }
+            }
+            // find recursively
+            foreach (var it in ic.Items)
+            {
+                var subIc = ig.ContainerFromItem(it) as ItemsControl;
+                if (null != subIc && subIc.HasItems)
+                {
+                    var recFound = findTreeUi(subIc, v);
+                    if (null != recFound)
+                    {
+                        return recFound;
+                    }
+                }
+            }
+            return null;
+        }
+
     } // end - class TreeFocus
 
     internal class TreePath

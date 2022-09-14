@@ -19,7 +19,13 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding subNodes}">
                     <StackPanel Orientation="Horizontal" Margin="2">
                         <Image Source="{Binding val.Icon}" Width="16" Height="16" />
-                        <TextBlock Text="{Binding val.Name}" ToolTip="{Binding val.Tooltip}" Tag="{Binding val.Pid}" Margin="6,0,0,0" VerticalAlignment="Center" MouseDown="TextBlock_MouseDown" />
+                        <TextBlock Text="{Binding val.Name}" ToolTip="{Binding val.Tooltip}" Tag="{Binding val.Pid}" Margin="6,0,0,0" VerticalAlignment="Center" MouseDown="TextBlock_MouseDown">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu x:Name="menuTreePop">
+                                    <MenuItem x:Name="xMenuItem_BrintToFront" Header="See process" Click="XMenuItem_BrintToFront_Click" />
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>

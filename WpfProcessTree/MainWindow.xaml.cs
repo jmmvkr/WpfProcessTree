@@ -34,6 +34,8 @@ namespace WpfProcessTree
         Node<ProcessStructure>[] emptyList = { };
         Encoding enc = new UTF8Encoding(true, true);
         ISet<string> psIgnore = new HashSet<string>();
+        TreeViewItem tviSelected;
+        TextBlock txtSelected;
 
 
         public MainWindow()
@@ -131,6 +133,16 @@ namespace WpfProcessTree
 
         private void XTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            TreeViewItem tvi = null;
+            var sel = e.NewValue;
+            if (null != sel)
+            {
+                tvi = TreeFocus.findTreeUi(xTree, sel);
+            }
+            if (null != tvi)
+            {
+                tviSelected = tvi;
+            }
         }
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
@@ -138,6 +150,10 @@ namespace WpfProcessTree
             if (2 == e.ClickCount)
             {
                 bringProcessToFront(sender);
+            }
+            if (1 == e.ClickCount)
+            {
+                txtSelected = sender as TextBlock;
             }
         }
 
@@ -181,6 +197,11 @@ namespace WpfProcessTree
             catch (Exception) { }
             p = res;
             return bFound;
+        }
+
+        private void XMenuItem_BrintToFront_Click(object sender, RoutedEventArgs e)
+        {
+            bringProcessToFront(txtSelected);
         }
 
     } // end - class MainWindow
