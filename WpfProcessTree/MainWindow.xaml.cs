@@ -26,6 +26,9 @@ namespace WpfProcessTree
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string PTH_IGNORE = "ps-ignore.txt";
+        const string PTH_SAVE = "ps-list.txt";
+
         ProcessModel psModel;
         IList<Node<ProcessStructure>> psList;
         Node<ProcessStructure>[] emptyList = { };
@@ -57,23 +60,28 @@ namespace WpfProcessTree
             }
             if (Key.S == k && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                saveProcessGroups("ps-list.txt");
+                saveProcessGroups();
             }
         }
 
         void loadIgnoreGroups()
         {
+            string path = PTH_IGNORE;
             psIgnore.Clear();
-            foreach (var line in File.ReadAllLines("ps-ignore.txt"))
+            if (File.Exists(path))
             {
-                var trm = line.Trim();
-                if (String.IsNullOrEmpty(trm)) continue;
-                psIgnore.Add(trm);
+                foreach (var line in File.ReadAllLines(path))
+                {
+                    var trm = line.Trim();
+                    if (String.IsNullOrEmpty(trm)) continue;
+                    psIgnore.Add(trm);
+                }
             }
         }
 
-        void saveProcessGroups(string path)
+        void saveProcessGroups()
         {
+            string path = PTH_SAVE;
             StringBuilder sb = new StringBuilder();
             foreach (var grp in psList)
             {
