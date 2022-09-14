@@ -6,6 +6,15 @@
         xmlns:local="clr-namespace:WpfProcessTree"
         mc:Ignorable="d"
         Title="Process Tree" Height="450" Width="800">
+
+    <Window.Resources>
+        <ContextMenu x:Key="xTreeMenu">
+            <MenuItem x:Name="xMenuItem_BrintToFront" Header="See process" Click="XMenuItem_BrintToFront_Click" />
+            <MenuItem x:Name="xMenuItem_MoveToCenter" Header="Move to Center" Click="XMenuItem_MoveToCenter_Click" />
+            <MenuItem x:Name="xMenuItem_Resize" Header="Resize" Click="XMenuItem_Resize_Click" />
+            <MenuItem x:Name="xMenuItem_ExploreFolder" Header="Explore Folder" Click="XMenuItem_ExploreFolder_Click" />
+        </ContextMenu>
+    </Window.Resources>
     
     <Grid Margin="4" Background="#eee">
         <Grid.RowDefinitions>
@@ -14,21 +23,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBox Grid.Row="0" x:Name="txtFilter" Padding="6,4" TextChanged="TxtFilter_TextChanged" KeyDown="TxtFilter_KeyDown" />
-        <TreeView Grid.Row="2" x:Name="xTree" SelectedItemChanged="XTree_SelectedItemChanged">
+        <TreeView Grid.Row="2" x:Name="xTree" SelectedItemChanged="XTree_SelectedItemChanged" KeyDown="XTree_KeyDown">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding subNodes}">
                     <StackPanel Orientation="Horizontal" Margin="2">
                         <Image Source="{Binding val.Icon}" Width="16" Height="16" />
-                        <TextBlock Text="{Binding val.Name}" ToolTip="{Binding val.Tooltip}" Tag="{Binding val.Pid}" Margin="6,0,0,0" VerticalAlignment="Center" MouseDown="TextBlock_MouseDown">
-                            <TextBlock.ContextMenu>
-                                <ContextMenu x:Name="menuTreePop">
-                                    <MenuItem x:Name="xMenuItem_BrintToFront" Header="See process" Click="XMenuItem_BrintToFront_Click" />
-                                    <MenuItem x:Name="xMenuItem_MoveToCenter" Header="Move to Center" Click="XMenuItem_MoveToCenter_Click" />
-                                    <MenuItem x:Name="xMenuItem_Resize" Header="Resize" Click="XMenuItem_Resize_Click" />
-                                    <MenuItem x:Name="xMenuItem_ExploreFolder" Header="Explore Folder" Click="XMenuItem_ExploreFolder_Click" />
-                                </ContextMenu>
-                            </TextBlock.ContextMenu>
-                        </TextBlock>
+                        <TextBlock Text="{Binding val.Name}" ToolTip="{Binding val.Tooltip}" Tag="{Binding val.Pid}" Margin="6,0,0,0" VerticalAlignment="Center" MouseDown="TextBlock_MouseDown" ContextMenu="{StaticResource xTreeMenu}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>

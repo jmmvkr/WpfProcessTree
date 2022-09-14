@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -268,6 +269,15 @@ namespace WpfProcessTree
         void exploreFolder(string folderPath)
         {
             Process.Start(folderPath);
+        }
+
+        private void XTree_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Key.Space == e.Key)
+            {
+                ContextMenu menu = FindResource("xTreeMenu") as ContextMenu;
+                menu.IsOpen = true;
+            }
         }
 
     } // end - class MainWindow
