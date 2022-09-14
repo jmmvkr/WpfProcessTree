@@ -54,13 +54,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dialog\ConfirmPanel.xaml.cs">
+      <DependentUpon>ConfirmPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialog\DlgSet.cs" />
+    <Compile Include="Dialog\IDialog.cs" />
+    <Compile Include="Dialog\IDialogControl.cs" />
     <Compile Include="Dialog\ReuseAdapter.cs" />
     <Compile Include="Dialog\ReuseDialog.cs" />
     <Compile Include="Dialog\SizeDialog.xaml.cs">
       <DependentUpon>SizeDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="TreeFocus.cs" />
+    <Page Include="Dialog\ConfirmPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialog\SizeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

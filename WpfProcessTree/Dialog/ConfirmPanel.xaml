@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="WpfProcessTree.Dialog.ConfirmPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfProcessTree.Dialog"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="200">
+    <Grid Margin="8,10,9,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="MinWidth" Value="100" />
+                <Setter Property="MinHeight" Value="38" />
+            </Style>
+        </Grid.Resources>
+        <Button Grid.Column="1" x:Name="btnCancel" Content="Cancel" />
+        <Button Grid.Column="3" x:Name="btnOk" Content="Ok" />
+    </Grid>
+</UserControl>

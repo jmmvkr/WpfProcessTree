@@ -8,11 +8,13 @@ using System.Windows.Input;
 
 namespace WpfProcessTree.Dialog
 {
-    public class ReuseAdapter<T> where T : Window
+    public class ReuseAdapter<T> : IDialog where T : Window
     {
         T _ins;
         bool bDestorying = false;
+        bool bOk = false;
         public T ins { get { return _ins; } }
+
 
         public ReuseAdapter(T pIns)
         {
@@ -35,7 +37,11 @@ namespace WpfProcessTree.Dialog
 
         void PIns_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            _ins.Close();
+            if (e.Key == Key.Escape)
+            {
+                _ins.Close();
+                e.Handled = true;
+            }
         }
 
         public void destory()
@@ -51,20 +57,40 @@ namespace WpfProcessTree.Dialog
 
         public bool showDialog(Window wParent)
         {
-            bool bOk;
             var w = _ins;
+
+            IDialogControl ctrl = w as IDialogControl;
+            if (null != ctrl)
+            {
+                ctrl.dlg = this;
+            }
+
+            bOk = false;
             if (null == wParent)
             {
-                bOk = (true == w.ShowDialog());
+                w.ShowDialog();
             }
             else
             {
                 w.Owner = wParent;
-                bOk = (true == w.ShowDialog());
+                w.ShowDialog();
                 w.Owner = null;
             }
             return bOk;
         }
-    }
+
+        public void cancel()
+        {
+            bOk = false;
+            _ins.Close();
+        }
+
+        public void ok()
+        {
+            bOk = true;
+            _ins.Close();
+        }
+
+    } // end - class ReuseAdapter
 
 }

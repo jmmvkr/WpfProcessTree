@@ -17,11 +17,40 @@ namespace WpfProcessTree.Dialog
     /// <summary>
     /// Interaction logic for SizeDialog.xaml
     /// </summary>
-    public partial class SizeDialog : Window
+    public partial class SizeDialog : Window, IDialogControl
     {
+        public IDialog dlg { get; set; }
+
         public SizeDialog()
         {
             InitializeComponent();
+            this.Loaded += SizeDialog_Loaded;
+            this.IsVisibleChanged += Dialog_IsVisibleChanged;
         }
-    }
+
+        private void SizeDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            xConfirm.btnOk.Click += BtnOk_Click;
+            xConfirm.btnCancel.Click += BtnCancel_Click;
+        }
+
+        private void Dialog_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+            {
+
+            }
+        }
+
+        void BtnOk_Click(object sender, RoutedEventArgs e)
+        {
+            dlg.ok();
+        }
+
+        void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            dlg.cancel();
+        }
+
+    } // end - class SizeDialog
 }

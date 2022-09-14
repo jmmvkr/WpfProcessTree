@@ -255,7 +255,14 @@ namespace WpfProcessTree
                 //wp.bringToFront();
 
                 var dlg = DlgSet.ins().dlgSize;
-                dlg.showDialog();
+                if (ReuseDialog.Ok == dlg.showDialog())
+                {
+                    MessageBox.Show("ok");
+                }
+                else
+                {
+                    MessageBox.Show("cancel");
+                }
             }
         }
 
