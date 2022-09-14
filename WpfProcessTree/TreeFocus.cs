@@ -21,6 +21,24 @@ namespace WpfProcessTree
                 Node<ProcessStructure> newTreeNode = null;
                 Node<ProcessStructure> newParentNode = null;
 
+                // focus on a group when pid is 0
+                if (0 == pid)
+                {
+                    string nm = selNode.val.name;
+
+                    TreePath tPath = new TreePath();
+                    foreach (var grp in psList)
+                    {
+                        if (nm.Equals(grp.__value.name))
+                        {
+                            tPath.add(grp);
+                            break;
+                        }
+                    }
+                    tPath.setTreeFocus(xTree);
+                    return;
+                }
+
                 // find node and parent node
                 foreach (var grp in psList)
                 {
@@ -101,14 +119,15 @@ namespace WpfProcessTree
             {
                 TreeViewItem tviPart = findTreeItem(tvi, itemOrder[i]);
                 if (null == tviPart) { break; }
+                if (iLast == i)
+                {
+                    tviPart.Focus();
+                    break;
+                }
                 if (tviPart.HasItems)
                 {
                     tviPart.IsExpanded = true;
                     tviPart.UpdateLayout();
-                }
-                if (iLast == i)
-                {
-                    tviPart.Focus();
                 }
                 tvi = tviPart;
             }
