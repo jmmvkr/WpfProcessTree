@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using VData;
 using VProcessWindow;
 using VProcessWindow.Example;
+using WpfProcessTree.Dialog;
 
 namespace WpfProcessTree
 {
@@ -44,7 +45,14 @@ namespace WpfProcessTree
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             this.PreviewKeyDown += MainWindow_PreviewKeyDown;
+            this.Closed += MainWindow_Closed;
             psList = emptyList;
+            DlgSet.init();
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            DlgSet.ins().Dispose();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -243,8 +251,11 @@ namespace WpfProcessTree
             if (tryGetProcess(pidFromUi(txtSelected), out p))
             {
                 WindowPlacer wp = WindowPlacer.fromHandle(p.MainWindowHandle);
-                wp.resizeTo(1634, 934);
-                wp.bringToFront();
+                //wp.resizeTo(1634, 934);
+                //wp.bringToFront();
+
+                var dlg = DlgSet.ins().dlgSize;
+                dlg.showDialog();
             }
         }
 

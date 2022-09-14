@@ -54,7 +54,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dialog\DlgSet.cs" />
+    <Compile Include="Dialog\ReuseAdapter.cs" />
+    <Compile Include="Dialog\ReuseDialog.cs" />
+    <Compile Include="Dialog\SizeDialog.xaml.cs">
+      <DependentUpon>SizeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreeFocus.cs" />
+    <Page Include="Dialog\SizeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
