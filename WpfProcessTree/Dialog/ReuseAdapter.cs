@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace WpfProcessTree.Dialog
 {
-    public class ReuseAdapter<T> : IDialog where T : Window
+    public class ReuseAdapter<T> : IDialogControl where T : Window
     {
         T _ins;
         bool bDestorying = false;
@@ -59,10 +59,10 @@ namespace WpfProcessTree.Dialog
         {
             var w = _ins;
 
-            IDialogControl ctrl = w as IDialogControl;
-            if (null != ctrl)
+            IDialog targ = w as IDialog;
+            if (null != targ)
             {
-                ctrl.dlg = this;
+                targ.dlg = this;
             }
 
             bOk = false;

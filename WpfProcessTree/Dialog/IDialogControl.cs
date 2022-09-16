@@ -8,6 +8,7 @@ namespace WpfProcessTree.Dialog
 {
     public interface IDialogControl
     {
-        IDialog dlg { get; set; }
+        void ok();
+        void cancel();
     }
 }

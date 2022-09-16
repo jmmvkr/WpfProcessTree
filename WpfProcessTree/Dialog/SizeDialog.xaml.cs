@@ -17,9 +17,9 @@ namespace WpfProcessTree.Dialog
     /// <summary>
     /// Interaction logic for SizeDialog.xaml
     /// </summary>
-    public partial class SizeDialog : Window, IDialogControl
+    public partial class SizeDialog : Window, IDialog
     {
-        public IDialog dlg { get; set; }
+        public IDialogControl dlg { get; set; }
 
         public Param param;
         public Param result;
