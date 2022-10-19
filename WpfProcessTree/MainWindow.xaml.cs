@@ -46,8 +46,15 @@ namespace WpfProcessTree
             this.Loaded += MainWindow_Loaded;
             this.PreviewKeyDown += MainWindow_PreviewKeyDown;
             this.Closed += MainWindow_Closed;
+            this.Closing += MainWindow_Closing;
             psList = emptyList;
             DlgSet.init();
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            PlaySound.PlayNotificationSound(PlaySound.REG_NFC_DONE);
+            System.Threading.Thread.Sleep(1000);
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -60,6 +67,7 @@ namespace WpfProcessTree
             psModel = new ProcessModel();
             loadIgnoreGroups();
             refreshProcessTree(true);
+            PlaySound.PlayNotificationSound();
         }
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)

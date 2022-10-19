@@ -65,6 +65,8 @@
     <Compile Include="Dialog\SizeDialog.xaml.cs">
       <DependentUpon>SizeDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PlaySound.cs" />
+    <Compile Include="SysLog.cs" />
     <Compile Include="TreeFocus.cs" />
     <Page Include="Dialog\ConfirmPanel.xaml">
       <SubType>Designer</SubType>
