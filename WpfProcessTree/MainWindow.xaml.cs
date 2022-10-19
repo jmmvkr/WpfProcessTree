@@ -53,7 +53,7 @@ namespace WpfProcessTree
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            PlaySound.PlayNotificationSound(PlaySound.REG_NFC_DONE);
+            PlaySound.Notification.play(PlaySound.REG_NFC_DONE);
             System.Threading.Thread.Sleep(1000);
         }
 
@@ -67,7 +67,7 @@ namespace WpfProcessTree
             psModel = new ProcessModel();
             loadIgnoreGroups();
             refreshProcessTree(true);
-            PlaySound.PlayNotificationSound();
+            PlaySound.Notification.play();
         }
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)

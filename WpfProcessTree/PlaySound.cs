@@ -15,33 +15,68 @@ namespace WpfProcessTree
         public const string REG_NFC_DONE = @"AppEvents\Schemes\Apps\.Default\Notification.Proximity\.Current";
         public const string REG_NOTIFY = @"AppEvents\Schemes\Apps\.Default\Notification.Default\.Current";
 
-        public static void PlayNotificationSound(string regKey = REG_SMS)
+        public class Notification
         {
-            bool found = false;
-            try
+            public static void play(string regKey = REG_SMS)
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(regKey))
+                bool found = false;
+                try
                 {
-                    if (key != null)
+                    using (RegistryKey key = Registry.CurrentUser.OpenSubKey(regKey))
                     {
-                        Object o = key.GetValue(null); // pass null to get (Default)
-                        if (o != null)
+                        if (key != null)
                         {
-                            SoundPlayer theSound = new SoundPlayer((String)o);
-                            theSound.Play();
-                            found = true;
+                            Object o = key.GetValue(null); // pass null to get (Default)
+                            if (o != null)
+                            {
+                                SoundPlayer theSound = new SoundPlayer((String)o);
+                                theSound.Play();
+                                found = true;
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                SysLog.printMsg(ex);
-            }
-            if (!found)
-            {
-                SystemSounds.Beep.Play(); // consolation prize
+                catch (Exception ex)
+                {
+                    SysLog.printMsg(ex);
+                }
+                if (!found)
+                {
+                    SystemSounds.Beep.Play(); // consolation prize
+                }
             }
         }
+
+        public class Media
+        {
+
+            public static SoundPlayer playAsync(string path)
+            {
+                SoundPlayer player = new SoundPlayer(path);
+                player.Load();
+                player.Play();
+                return player;
+            }
+
+            public static SoundPlayer playSync(string path)
+            {
+                SoundPlayer player = new SoundPlayer(path);
+                player.Load();
+                player.PlaySync();
+                return player;
+            }
+
+            public static void play(string path)
+            {
+                Task.Run(() =>
+                {
+                    var refPlayer = playSync(path);
+                    refPlayer.Stop();
+                    refPlayer.Dispose();
+                    System.Windows.MessageBox.Show(path);
+                });
+            }
+        }
+
     }
 }
