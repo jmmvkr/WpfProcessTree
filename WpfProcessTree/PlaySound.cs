@@ -74,7 +74,6 @@ namespace WpfProcessTree
                     var refPlayer = playSync(path);
                     refPlayer.Stop();
                     refPlayer.Dispose();
-                    System.Windows.MessageBox.Show(path);
                 });
             }
 
