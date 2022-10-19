@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,6 +77,54 @@ namespace WpfProcessTree
                     System.Windows.MessageBox.Show(path);
                 });
             }
+
+        }
+
+        public class Mpeg
+        {
+            public static WmmPlayer play(string path, bool bLoop = false)
+            {
+                WmmPlayer wp = new WmmPlayer();
+                wp.open(path);
+                wp.play(bLoop);
+                return wp;
+            }
+        }
+
+
+        public class WmmPlayer
+        {
+            [DllImport("winmm.dll")]
+            static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
+
+            string _command;
+            bool isOpen;
+
+            public void open(string sFileName)
+            {
+                _command = "open \"" + sFileName + "\" type mpegvideo alias MediaFile";
+                mciSendString(_command, null, 0, IntPtr.Zero);
+                isOpen = true;
+            }
+
+            public void close()
+            {
+                _command = "close MediaFile";
+                mciSendString(_command, null, 0, IntPtr.Zero);
+                isOpen = false;
+            }
+
+            public void play(bool loop)
+            {
+                if (isOpen)
+                {
+                    _command = "play MediaFile";
+                    if (loop)
+                        _command += " REPEAT";
+                    mciSendString(_command, null, 0, IntPtr.Zero);
+                }
+            }
+
         }
 
     }
