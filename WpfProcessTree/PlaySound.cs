@@ -84,9 +84,19 @@ namespace WpfProcessTree
         {
             public static WmmPlayer play(string path, bool bLoop = false)
             {
-                WmmPlayer wp = new WmmPlayer();
-                wp.open(path);
+                WmmPlayer wp = open(path);
                 wp.play(bLoop);
+                return wp;
+            }
+
+            public static WmmPlayer open(string path, string alias = null)
+            {
+                WmmPlayer wp = new WmmPlayer();
+                if (null != alias)
+                {
+                    wp.alias = alias;
+                }
+                wp.open(path);
                 return wp;
             }
         }
@@ -97,32 +107,65 @@ namespace WpfProcessTree
             [DllImport("winmm.dll")]
             static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
 
-            string _command;
+            string _commandLast = "";
             bool isOpen;
+            string sAlias = "MediaFile";
+
+            public string lastCommand { get { return _commandLast; } }
+            public string alias { get { return sAlias; } set { sAlias = value; } }
+
 
             public void open(string sFileName)
             {
-                _command = "open \"" + sFileName + "\" type mpegvideo alias MediaFile";
+                var _command = String.Format("open \"{1}\" type mpegvideo alias {0}", sAlias, sFileName);
+                _commandLast = _command;
                 mciSendString(_command, null, 0, IntPtr.Zero);
                 isOpen = true;
             }
 
             public void close()
             {
-                _command = "close MediaFile";
+                var _command = String.Format("close {0}", sAlias);
+                _commandLast = _command;
                 mciSendString(_command, null, 0, IntPtr.Zero);
                 isOpen = false;
             }
 
+            public void play()
+            {
+                play(false);
+            }
+
             public void play(bool loop)
             {
+                var _command = String.Format("play {0}", sAlias);
                 if (isOpen)
                 {
-                    _command = "play MediaFile";
                     if (loop)
+                    {
                         _command += " REPEAT";
+                    }
+                    _commandLast = _command;
                     mciSendString(_command, null, 0, IntPtr.Zero);
                 }
+            }
+
+            string _Status()
+            {
+                StringBuilder sBuffer = new StringBuilder(128);
+                string cmdStatus = String.Format("status {0} mode", sAlias);
+                mciSendString(cmdStatus, sBuffer, sBuffer.Capacity, IntPtr.Zero);
+                return sBuffer.ToString();
+            }
+
+            public bool isPlaying()
+            {
+                string st = _Status();
+                if (st.IndexOf("playing", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+                return false;
             }
 
         }
